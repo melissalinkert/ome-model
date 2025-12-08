@@ -57,14 +57,14 @@ public class ReferenceTest {
     metadata = new OMEXMLMetadataImpl();
     metadata.setImageID(IMAGE_ID, 0);
 
-    for (int i=0; i<rois.length; i++) {
+    for (int i=0; i<ROI_IDS.length; i++) {
       metadata.setROIID(ROI_IDS[i], i);
     }
   }
 
   @Test
   public void checkResolvedReferences() {
-    for (int i=0; i<rois.length; i++) {
+    for (int i=0; i<ROI_IDS.length; i++) {
       metadata.setImageROIRef(ROI_IDS[i], 0, i);
     }
     metadata.resolveReferences();
@@ -79,7 +79,7 @@ public class ReferenceTest {
 
   @Test
   public void checkAutoReferenceResolution() {
-    for (int i=0; i<rois.length; i++) {
+    for (int i=0; i<ROI_IDS.length; i++) {
       metadata.setImageROIRef(ROI_IDS[i], 0, i);
     }
     OMEXMLMetadataImpl converted = new OMEXMLMetadataImpl();
