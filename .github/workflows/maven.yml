@@ -68,6 +68,12 @@ jobs:
           cache: 'maven'
       - name: Build
         run: mvn ${{ env.maven_commands }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ome-model ${{ matrix.java }} ${{ matrix.python }}
+          path: target/*.jar
+          retention-days: 15
   release:
     permissions:
       contents: write
