@@ -70,6 +70,7 @@ public class ReferenceTest {
     metadata.resolveReferences();
     OMEXMLMetadataImpl converted = new OMEXMLMetadataImpl();
     MetadataConverter.convertMetadata(metadata, converted);
+    converted.resolveReferences();
 
     assertEquals(converted.getImageROIRefCount(0), 2);
     for (int i=0; i<ROI_IDS.length; i++) {
