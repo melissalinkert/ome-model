@@ -48,7 +48,7 @@ public class ReferenceTest {
 
   public static final String IMAGE_ID = "Image:0";
 
-  public static final String[] ROI_IDS = {"ROI:0", "ROI:1"};
+  public static final String[] ROI_IDS = {"ROI:0", "ROI:1", "ROI:2"};
 
   private OMEXMLMetadataImpl metadata;
 
@@ -72,7 +72,7 @@ public class ReferenceTest {
     MetadataConverter.convertMetadata(metadata, converted);
     converted.resolveReferences();
 
-    assertEquals(converted.getImageROIRefCount(0), 2);
+    assertEquals(converted.getImageROIRefCount(0), ROI_IDS.length);
     for (int i=0; i<ROI_IDS.length; i++) {
       assertEquals(converted.getImageROIRef(0, i), ROI_IDS[i]);
     }
@@ -86,9 +86,33 @@ public class ReferenceTest {
     OMEXMLMetadataImpl converted = new OMEXMLMetadataImpl();
     MetadataConverter.convertMetadata(metadata, converted);
 
-    assertEquals(converted.getImageROIRefCount(0), 2);
+    assertEquals(converted.getImageROIRefCount(0), ROI_IDS.length);
     for (int i=0; i<ROI_IDS.length; i++) {
       assertEquals(converted.getImageROIRef(0, i), ROI_IDS[i]);
+    }
+  }
+
+  @Test
+  public void checkUpdatedReference() {
+    metadata.setImageROIRef(ROI_IDS[1], 0, 0);
+    metadata.setImageROIRef(ROI_IDS[0], 0, 0);
+
+    OMEXMLMetadataImpl converted = new OMEXMLMetadataImpl();
+    MetadataConverter.convertMetadata(metadata, converted);
+    assertEquals(converted.getImageROIRefCount(0), 1);
+    assertEquals(converted.getImageROIRef(0, 0), ROI_IDS[0]);
+  }
+
+  @Test
+  public void checkReferencesOutOfOrder() {
+    for (int i=0; i<ROI_IDS.length; i++) {
+      metadata.setImageROIRef(ROI_IDS[i], 0, ROI_IDS.length - i - 1);
+    }
+    OMEXMLMetadataImpl converted = new OMEXMLMetadataImpl();
+    MetadataConverter.convertMetadata(metadata, converted);
+    assertEquals(converted.getImageROIRefCount(0), ROI_IDS.length);
+    for (int i=0; i<ROI_IDS.length; i++) {
+      assertEquals(converted.getImageROIRef(0, ROI_IDS.length - i - 1), ROI_IDS[i]);
     }
   }
 
